@@ -1,3 +1,4 @@
+> ⚠️ Unauthorized copying, modification, or reuse of this project without credit to the original author (Abinash | Okami.buzz) is strictly prohibited under the MIT License.
 # Vortex-Ptero-Manager
 VORTEX PTERO MANAGER — CREDIT LICENSE
 
