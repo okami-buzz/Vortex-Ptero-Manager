@@ -1,2 +1,18 @@
 # Vortex-Ptero-Manager
-Pterodactyl Manager Discord Bot By Vortex Host with v! Prefix and every essential ptero feature for your bot
+VORTEX PTERO MANAGER — CREDIT LICENSE
+
+Developed by Abinash (Okami.buzz)
+© 2025 Vortex Host. All Rights Reserved.
+
+You are free to:
+- Use and modify the code for personal or commercial projects.
+- Share it publicly with proper credit.
+
+You must:
+- Keep the "Made by Abinash | Okami.buzz" credit visible in embeds or README.
+
+You cannot:
+- Claim this as your own original project.
+- Sell the code without explicit permission.
+
+Violation of these terms may result in permanent revocation of use rights.
