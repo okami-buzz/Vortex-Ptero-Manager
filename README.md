@@ -16,3 +16,7 @@ You cannot:
 - Sell the code without explicit permission.
 
 Violation of these terms may result in permanent revocation of use rights.
+---
+### 🧠 Credits
+Developed & Designed by **Abinash (Okami.buzz)**  
+© 2025 Vortex Host — All rights reserved under MIT License.
