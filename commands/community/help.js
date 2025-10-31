@@ -32,35 +32,11 @@ module.exports = {
 
       .addOptions([
 
-        {
+        { label: "💡 General Commands", description: "Basic user-related commands", value: "general" },
 
-          label: "💡 General Commands",
+        { label: "⚙️ Admin Commands", description: "Management & staff commands", value: "admin" },
 
-          description: "Basic user-related commands",
-
-          value: "general",
-
-        },
-
-        {
-
-          label: "⚙️ Admin Commands",
-
-          description: "Management & staff commands",
-
-          value: "admin",
-
-        },
-
-        {
-
-          label: "🧰 Server Management",
-
-          description: "Server, node & monitoring commands",
-
-          value: "server",
-
-        },
+        { label: "🧰 Server Management", description: "Server, node & monitoring commands", value: "server" },
 
       ]);
 
@@ -72,7 +48,7 @@ module.exports = {
 
       componentType: ComponentType.StringSelect,
 
-      time: 120000, // 2 minutes
+      time: 120000,
 
     });
 
@@ -104,29 +80,11 @@ module.exports = {
 
           .addFields(
 
-            {
+            { name: "`v!help`", value: "Displays this interactive help menu." },
 
-              name: "`v!help`",
+            { name: "`v!userinfo [UserID]`", value: "Check resource details of a user.\nExample: `v!userinfo 123456789`" },
 
-              value: "Displays this interactive help menu.",
-
-            },
-
-            {
-
-              name: "`v!userinfo [UserID]`",
-
-              value: "Check resource details of a user.\nExample: `v!userinfo` or `v!userinfo 123456789`",
-
-            },
-
-            {
-
-              name: "`v!myaccount`",
-
-              value: "Shows your linked panel account & details.",
-
-            },
+            { name: "`v!myaccount`", value: "Shows your linked panel account & details." },
 
             {
 
@@ -154,17 +112,11 @@ module.exports = {
 
           .setColor(0x11cbcb)
 
-          .setDescription("For staff use only — manage users, resources, and linking:")
+          .setDescription("For staff use only — manage users, linking, and system control:")
 
           .addFields(
 
-            {
-
-              name: "`v!addcoins <UserID> <Coins>`",
-
-              value: "Add coins to a user.\nExample: `v!addcoins 123456789 50`",
-
-            },
+            { name: "`v!addcoins <UserID> <Coins>`", value: "Add coins to a user.\nExample: `v!addcoins 123456789 50`" },
 
             {
 
@@ -174,13 +126,7 @@ module.exports = {
 
             },
 
-            {
-
-              name: "`v!deletecoupon <CODE>`",
-
-              value: "Delete a coupon.\nExample: `v!deletecoupon VRTX50`",
-
-            },
+            { name: "`v!deletecoupon <CODE>`", value: "Delete a coupon.\nExample: `v!deletecoupon VRTX50`" },
 
             {
 
@@ -206,17 +152,11 @@ module.exports = {
 
             },
 
-            {
-
-              name: "`v!removeaccount <UserID>`",
-
-              value: "Remove a hosting account.\nExample: `v!removeaccount 123456789`",
-
-            },
+            { name: "`v!removeaccount <UserID>`", value: "Remove a hosting account.\nExample: `v!removeaccount 123456789`" },
 
             {
 
-              name: "`v!linkaccount <DiscordID> <PanelEmail>`",
+              name: "`v!linkaccount <@User> <PanelEmail>`",
 
               value: "Link a panel account with a Discord user (Admin only).",
 
@@ -232,11 +172,33 @@ module.exports = {
 
             {
 
-              name: "`v!restart`",
+              name: "`v!deleteserver <Email or ID>`",
 
-              value: "Restart the bot safely (Admin only).",
+              value: "Delete an existing server permanently (Admin only).",
 
-            }
+            },
+
+            {
+
+              name: "`v!transferownership <ServerID|Email> <NewOwnerEmail>`",
+
+              value:
+
+                "Transfer server ownership from one panel account to another.\n(Admin only — confirmation & dropdown selection included.)",
+
+            },
+
+            {
+
+              name: "`v!transfernode <ServerName|Email|DiscordID>`",
+
+              value:
+
+                "Transfer a server to another node using dropdown menus for node selection.\n(Admin only — full confirmation and log support.)",
+
+            },
+
+            { name: "`v!restart`", value: "Restart the bot safely (Admin only)." }
 
           )
 
@@ -266,15 +228,7 @@ module.exports = {
 
               value:
 
-                "Create a new Minecraft server.\nExample: `v!createserver test@vortexhost.buzz 2048 10000 100 paper MyServer`",
-
-            },
-
-            {
-
-              name: "`v!deleteserver <Email or ID>`",
-
-              value: "Delete a server.\nExample: `v!deleteserver test@vortexhost.buzz`",
+                "Create a new Minecraft server.\nNow includes **node selection** feature.\nExample: `v!createserver test@vortexhost.buzz 2048 10000 100 paper MyServer`",
 
             },
 
@@ -300,9 +254,7 @@ module.exports = {
 
               name: "`v!panelstatus start|stop|force [minutes]`",
 
-              value:
-
-                "Monitor panel & node uptime live.\nExample: `v!panelstatus start 5` → Auto updates every 5 mins.",
+              value: "Monitor panel & node uptime live.\nExample: `v!panelstatus start 5` → Auto updates every 5 mins.",
 
             },
 
