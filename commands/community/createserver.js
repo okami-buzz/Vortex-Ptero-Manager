@@ -1,6 +1,16 @@
 const axios = require("axios");
 
-const { EmbedBuilder } = require("discord.js");
+const {
+
+  EmbedBuilder,
+
+  ActionRowBuilder,
+
+  StringSelectMenuBuilder,
+
+  ComponentType,
+
+} = require("discord.js");
 
 require("dotenv").config();
 
@@ -16,11 +26,9 @@ module.exports = {
 
     const adminRole = message.member.roles.cache.has(`${process.env.Admin_ROLE_ID}`);
 
-    if (!adminRole) {
+    if (!adminRole)
 
       return message.reply("🚫 You don’t have permission to use this command!");
-
-    }
 
     // 📥 Validate args
 
@@ -66,85 +74,243 @@ module.exports = {
 
     try {
 
-      // 🌐 Send API request
+      // 🌍 Fetch nodes list
 
-      const response = await axios.post(
+      const nodesRes = await axios.get(`${process.env.Dash_URL}/api/nodes`, {
 
-        `${process.env.Dash_URL}/api/createserver`,
+        headers: { Authorization: `Bearer ${process.env.DASH_API}` },
 
-        {
+      });
 
-          email,
+      const nodes = nodesRes.data.data || [];
 
-          ram: ramInt,
+      if (!nodes.length) return message.reply("❌ No nodes found on the panel.");
 
-          disk: diskInt,
+      // 🧭 Dropdown for node selection
 
-          cpu: cpuInt,
+      const menu = new StringSelectMenuBuilder()
 
-          software: software.toLowerCase(),
+        .setCustomId("node-select")
 
-          name,
+        .setPlaceholder("🧩 Select a Node for this server")
 
-          backups: "manual",
+        .addOptions(
 
-        },
+          nodes.map((n) => ({
 
-        { headers: { Authorization: `Bearer ${process.env.DASH_API}` } }
+            label: n.attributes.name.slice(0, 90),
 
-      );
+            description: `Node ID: ${n.attributes.id} | Location: ${n.attributes.location}`,
 
-      const data = response.data;
+            value: n.attributes.id.toString(),
 
-      if (data.status === "success") {
+          }))
 
-        // ✅ Success Embed
+        );
 
-        const embed = new EmbedBuilder()
+      const row = new ActionRowBuilder().addComponents(menu);
 
-          .setTitle(`${process.env.Name} — Server Created`)
+      const embed = new EmbedBuilder()
 
-          .setColor(0x00ff99)
+        .setTitle(`${process.env.Name} — Node Selection 🌐`)
 
-          .setDescription(`✅ Successfully created a new server on your panel!`)
+        .setDescription(
 
-          .addFields(
+          "Choose the node where you want to host this new server.\n\nOnce selected, creation will start automatically."
 
-            { name: "📧 Email", value: `\`${email}\``, inline: true },
+        )
 
-            { name: "🧩 Name", value: `\`${name}\``, inline: true },
+        .setColor(0x11cbcb)
 
-            { name: "🖥️ Software", value: `\`${software}\``, inline: true },
+        .setThumbnail(process.env.Icon)
 
-            { name: "💾 RAM", value: `\`${ramInt} MB\``, inline: true },
+        .setFooter({
 
-            { name: "📂 Disk", value: `\`${diskInt} MB\``, inline: true },
+          text: `Prefix: v! | Vortex Host | Okami.buzz | ${new Date().toLocaleTimeString(
 
-            { name: "⚙️ CPU", value: `\`${cpuInt}%\``, inline: true },
+            "en-IN",
 
-            { name: "🔁 Backups", value: "`Manual`", inline: true }
+            { timeZone: "Asia/Kolkata" }
 
-          )
+          )}`,
 
-          .setThumbnail(process.env.Icon)
+        })
 
-          .setTimestamp()
+        .setTimestamp();
 
-          .setFooter({ text: `Prefix: v! | Okami.buzz | Vortex Host` });
+      const sent = await message.reply({ embeds: [embed], components: [row] });
 
-        await message.reply({ embeds: [embed] });
+      // 🎛️ Collector for node selection
 
-      } else {
+      const collector = sent.createMessageComponentCollector({
 
-        message.reply("❌ Failed to create server. Check your panel or provided data.");
+        componentType: ComponentType.StringSelect,
 
-      }
+        time: 30000,
 
-    } catch (err) {
+      });
 
-      console.error(err);
+      collector.on("collect", async (interaction) => {
 
-      message.reply("🚫 Error: Unable to connect to the panel or invalid API key.");
+        if (interaction.user.id !== message.author.id)
+
+          return interaction.reply({
+
+            content: "⚠️ Only the admin who used the command can select a node.",
+
+            ephemeral: true,
+
+          });
+
+        const nodeId = interaction.values[0];
+
+        await interaction.deferUpdate();
+
+        // 🚀 Create server with selected node
+
+        try {
+
+          const response = await axios.post(
+
+            `${process.env.Dash_URL}/api/createserver`,
+
+            {
+
+              email,
+
+              ram: ramInt,
+
+              disk: diskInt,
+
+              cpu: cpuInt,
+
+              software: software.toLowerCase(),
+
+              name,
+
+              node_id: nodeId,
+
+              backups: "manual",
+
+            },
+
+            { headers: { Authorization: `Bearer ${process.env.DASH_API}` } }
+
+          );
+
+          const data = response.data;
+
+          if (data.status === "success") {
+
+            const successEmbed = new EmbedBuilder()
+
+              .setTitle(`${process.env.Name} — Server Created ✅`)
+
+              .setColor(0x00ff73)
+
+              .setDescription(`✅ Successfully created a new server on your panel!`)
+
+              .addFields(
+
+                { name: "📧 Email", value: `\`${email}\``, inline: true },
+
+                { name: "🧩 Name", value: `\`${name}\``, inline: true },
+
+                { name: "🖥️ Software", value: `\`${software}\``, inline: true },
+
+                { name: "💾 RAM", value: `\`${ramInt} MB\``, inline: true },
+
+                { name: "📂 Disk", value: `\`${diskInt} MB\``, inline: true },
+
+                { name: "⚙️ CPU", value: `\`${cpuInt}%\``, inline: true },
+
+                { name: "🗄️ Node ID", value: `\`${nodeId}\``, inline: true },
+
+                { name: "🔁 Backups", value: "`Manual`", inline: true }
+
+              )
+
+              .setThumbnail(process.env.Icon)
+
+              .setFooter({
+
+                text: `Prefix: v! | Okami.buzz | Vortex Host | ${new Date().toLocaleTimeString(
+
+                  "en-IN",
+
+                  { timeZone: "Asia/Kolkata" }
+
+                )}`,
+
+              })
+
+              .setTimestamp();
+
+            await sent.edit({ embeds: [successEmbed], components: [] });
+
+          } else {
+
+            await sent.edit({
+
+              embeds: [
+
+                new EmbedBuilder()
+
+                  .setTitle("❌ Server Creation Failed")
+
+                  .setColor(0xff0000)
+
+                  .setDescription("The panel API returned an error — please recheck details."),
+
+              ],
+
+              components: [],
+
+            });
+
+          }
+
+        } catch (err) {
+
+          console.error(err);
+
+          await sent.edit({
+
+            embeds: [
+
+              new EmbedBuilder()
+
+                .setTitle("🚫 API Error")
+
+                .setColor(0xff3333)
+
+                .setDescription(
+
+                  "Failed to connect to the panel. Please verify your API key or node setup."
+
+                ),
+
+            ],
+
+            components: [],
+
+          });
+
+        }
+
+      });
+
+      collector.on("end", async () => {
+
+        await sent.edit({ components: [] }).catch(() => {});
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.reply("🚫 Could not fetch nodes or connect to panel.");
 
     }
 
