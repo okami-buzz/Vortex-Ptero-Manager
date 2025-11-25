@@ -1,0 +1,60 @@
+{
+  "name": "vortex-deploy",
+  "version": "1.0.0",
+  "description": "🚀 Vortex Deploy — A next-gen Discord bot to manage your Pterodactyl panel with stunning embeds, real-time uptime, and smooth automation.",
+  "main": "index.js",
+  "type": "module",
+  "author": {
+    "name": "Okami (Developer: Abinash)",
+    "url": "https://discord.gg/N5Jy9XdV2b"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VortexDeploy/VortexDeployBot"
+  },
+  "bugs": {
+    "url": "https://discord.gg/N5Jy9XdV2b",
+    "email": "mranoymous699@gmail.com"
+  },
+  "homepage": "",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node src/deploy-commands.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "discord",
+    "discord-bot",
+    "pterodactyl",
+    "vortex",
+    "vortex-deploy",
+    "okami",
+    "server-management",
+    "hosting-bot",
+    "automation",
+    "modern",
+    "professional"
+  ],
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "discord.js": "^14.15.2",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.7.0",
+    "moment-timezone": "^0.5.45",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "eslint": "^9.14.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "vortexdeploy": {
+    "branding": "⚡ Made by Okami | Vortex Deploy",
+    "timezone": "Asia/Kolkata",
+    "theme": "dark-premium"
+  }
+}
